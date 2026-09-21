@@ -61,13 +61,12 @@ npm entry, not to fight it.
 
 ## robots.txt
 
-> **Open decision for the maintainer before first publish: whether to ship
-> `bandcamp_search` given `Disallow: /api/`.** The facts and the reasoning
-> are recorded below; the decision is not made here.
+> **Decision (2026-09-21): `bandcamp_search` ships in 0.1.0**, although the
+> endpoint behind it sits under `Disallow: /api/`. The grounds are below.
 
-**Last checked: 2026-09-20** (`curl -s https://bandcamp.com/robots.txt`:
-HTTP 200, `text/plain`, 1053 bytes). Re-check before every release and
-update this section.
+**Last checked: 2026-09-21** (`curl -s https://bandcamp.com/robots.txt`:
+HTTP 200, `text/plain`, 1053 bytes; unchanged from the previous check).
+Re-check before every release and update this section.
 
 The rules for all user agents, verbatim:
 
@@ -117,26 +116,29 @@ What that means for each path this project requests, under the
 The HTML search page `/search` is disallowed too, so it is no alternative
 to the search API.
 
-**Reasoning, for the decision.** robots.txt governs automated crawlers.
-This tool makes a request only when a user's MCP client calls a tool, one
-page or API call per tool call (plus any redirects and at most one retry),
-paced and capped at 3 in flight. It doesn't crawl, index or cache, and it
-identifies itself in its User-Agent
-(`Mozilla/5.0 (compatible; bandcamp-mcp/<version>; +https://github.com/Venut-Technologies/bandcamp-mcp)`).
-It never sends `ClaudeBot`, and it runs on the user's machine whichever
-model drives it. Points on the other side: `Disallow: /api/` with a
-handful of explicit `Allow`s reads as a deliberate choice about which API
-paths automated clients may use, and search is not among them; a model
-can issue many tool calls in a row without a human approving each one; and
-the `ClaudeBot` block shows where Bandcamp stands on Anthropic's crawler,
-which is not this tool but is a signal when this tool is used from Claude.
+**Grounds.** robots.txt is addressed to crawlers. This server is not one:
+it makes a request only when a user's MCP client calls a tool — one page or
+API call per call, plus any redirects and at most one retry — at most 3 in
+flight, at least 150 ms apart. It follows no links, visits no URL it was not
+asked for, builds no index, and keeps nothing: every call is fetched live and
+the result goes to that user's client alone. Requests identify the project in
+their User-Agent
+(`Mozilla/5.0 (compatible; bandcamp-mcp/<version>; +https://github.com/Venut-Technologies/bandcamp-mcp)`),
+and run from the user's own machine, never from ours. The `ClaudeBot` block
+is about Anthropic's crawler, which this is not, whichever model drives it.
 
-**Fallback.** If Bandcamp objects, or the maintainer decides against
-relying on a disallowed path, drop `bandcamp_search` or replace it. The
-other four tools don't depend on it: browse and artist discographies also
-yield slugs, and the detail tools accept a slug converted from any Bandcamp
-URL the user gives. What would be lost is finding an artist, release or
-label by name.
+What stands against that is also recorded: `Disallow: /api/` alongside three
+explicit `Allow`s reads as a deliberate choice about which API paths automated
+clients may use, and the search endpoint is not among them; and a model can
+issue tool calls in sequence without a person approving each one.
+
+**Commitment.** If Bandcamp objects to this use of the search endpoint, the
+project changes the tool or removes it — no argument, no delay. The other four
+tools do not depend on it: browse and artist discographies also yield slugs,
+and the detail tools take a slug converted from any Bandcamp URL the user has.
+What would be lost is finding an artist, release or label by name. This section
+is re-checked against the live file before every release; if the rules change,
+the decision is made again rather than assumed.
 
 ## Release process
 
@@ -208,7 +210,8 @@ been run yet.
 
 1. Make the repository public. The README badges, the issues links in the
    README and in tool error messages, and npm provenance all need it.
-2. Decide the [robots.txt](#robotstxt) question.
+2. Re-read [robots.txt](#robotstxt) against the live file. The decision to
+   ship `bandcamp_search` is recorded there; a change in the rules reopens it.
 3. Set the repository variable `SMOKE_MAINTAINER` to the GitHub login the
    smoke-test tracking issue should be assigned to.
 4. Run `smoke-test.yml` once by hand (Actions → Bandcamp smoke test → Run
