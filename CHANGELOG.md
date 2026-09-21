@@ -7,10 +7,10 @@ contain breaking changes.
 
 ## [Unreleased]
 
-The first release, not yet published: an anonymous, read-only MCP server for
-Bandcamp discovery, over stdio, with five tools. Dating this section and
-moving it under `## [0.1.0]` is the release commit
-(see [CONTRIBUTING.md](./CONTRIBUTING.md#release-process)).
+## [0.1.0] - 2026-09-21
+
+The first release: an anonymous, read-only MCP server for Bandcamp discovery,
+over stdio, with five tools.
 
 ### Added
 
@@ -69,4 +69,5 @@ straightforward Bandcamp reader:
 - **`priceCurrency`.** Added next to `priceText` (ISO 4217, from the same
   offer), since a price of "9" alone is ambiguous.
 
-[Unreleased]: https://github.com/Venut-Technologies/bandcamp-mcp/commits/main
+[Unreleased]: https://github.com/Venut-Technologies/bandcamp-mcp/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/Venut-Technologies/bandcamp-mcp/releases/tag/v0.1.0
