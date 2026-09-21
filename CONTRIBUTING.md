@@ -212,8 +212,10 @@ been run yet.
    README and in tool error messages, and npm provenance all need it.
 2. Re-read [robots.txt](#robotstxt) against the live file. The decision to
    ship `bandcamp_search` is recorded there; a change in the rules reopens it.
-3. Set the repository variable `SMOKE_MAINTAINER` to the GitHub login the
-   smoke-test tracking issue should be assigned to.
+3. Optional: set the repository variable `SMOKE_MAINTAINER` to a GitHub login
+   and the smoke-test tracking issue is assigned to it. Deliberately unset for
+   now, so the issue is created unassigned and the pinned issue plus the red
+   run are the signal.
 4. Run `smoke-test.yml` once by hand (Actions → Bandcamp smoke test → Run
    workflow) and confirm it is green.
 5. Force one failure and confirm the tracking issue is created, labeled
