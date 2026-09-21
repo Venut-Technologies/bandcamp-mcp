@@ -1,0 +1,18 @@
+{
+  "auto": {
+    "results": [
+      {
+        "type": "b",
+        "name": "Paper Kite Records",
+        "item_url_root": "https://paperkiterecords.bandcamp.com",
+        "is_label": true
+      },
+      {
+        "type": "b",
+        "name": "Paper Kite",
+        "item_url_root": "https://thepaperkite.bandcamp.com",
+        "is_label": false
+      }
+    ]
+  }
+}

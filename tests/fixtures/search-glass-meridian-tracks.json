@@ -1,0 +1,406 @@
+{
+  "auto": {
+    "results": [
+      {
+        "type": "t",
+        "name": "Glass Meridian (Aster Vane Remix)",
+        "band_name": "Ilya Okonkwo",
+        "album_name": "Glass Meridian",
+        "item_url_root": "https://noor-okonkwo.bandcamp.com",
+        "item_url_path": "https://noor-okonkwo.bandcamp.com/track/tidal-harbour-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Ilya Okonkwo",
+        "album_name": "Glass Meridian",
+        "item_url_root": "https://noor-okonkwo.bandcamp.com",
+        "item_url_path": "https://noor-okonkwo.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Cedar Harbour 2",
+        "band_name": "Kiro Okonkwo",
+        "album_name": "Neon Harbour 2",
+        "item_url_root": "https://sable-okonkwo.bandcamp.com",
+        "item_url_path": "https://sable-okonkwo.bandcamp.com/track/ember-harbour-2"
+      },
+      {
+        "type": "t",
+        "name": "Grey Harbour 2",
+        "band_name": "Kiro Okonkwo",
+        "album_name": "Neon Harbour 2",
+        "item_url_root": "https://sable-okonkwo.bandcamp.com",
+        "item_url_path": "https://sable-okonkwo.bandcamp.com/track/sodium-signal-2"
+      },
+      {
+        "type": "t",
+        "name": "Paper Signal 2",
+        "band_name": "Fen Okonkwo",
+        "album_name": null,
+        "item_url_root": "https://thelanternhouse.net/album/winter-hymn",
+        "item_url_path": "https://thelanternhouse.net/album/winter-hymn"
+      },
+      {
+        "type": "t",
+        "name": "Glass Signal 2",
+        "band_name": "Ilya Okonkwo",
+        "album_name": "Glass Meridian",
+        "item_url_root": "https://noor-okonkwo.bandcamp.com",
+        "item_url_path": "https://noor-okonkwo.bandcamp.com/track/night-signal-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Glass Meridian",
+        "album_name": "Slow Signal 2",
+        "item_url_root": "https://odile-okonkwo.bandcamp.com",
+        "item_url_path": "https://odile-okonkwo.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Quiet Signal 2",
+        "band_name": "Bram Okonkwo",
+        "album_name": "Quiet Signal 2",
+        "item_url_root": "https://lera-okonkwo.bandcamp.com",
+        "item_url_path": "https://lera-okonkwo.bandcamp.com/track/copper-signal-2"
+      },
+      {
+        "type": "t",
+        "name": "Velvet Signal 2",
+        "band_name": "Glass Meridian",
+        "album_name": "Slow Signal 2",
+        "item_url_root": "https://odile-okonkwo.bandcamp.com",
+        "item_url_path": "https://odile-okonkwo.bandcamp.com/track/hollow-signal-2"
+      },
+      {
+        "type": "t",
+        "name": "Amber Signal 2",
+        "band_name": "Glass Meridian",
+        "album_name": "Slow Signal 2",
+        "item_url_root": "https://odile-okonkwo.bandcamp.com",
+        "item_url_path": "https://odile-okonkwo.bandcamp.com/track/winter-signal-2"
+      },
+      {
+        "type": "t",
+        "name": "Static Signal 2",
+        "band_name": "Glass Meridian",
+        "album_name": "Slow Signal 2",
+        "item_url_root": "https://odile-okonkwo.bandcamp.com",
+        "item_url_path": "https://odile-okonkwo.bandcamp.com/track/marble-signal-2"
+      },
+      {
+        "type": "t",
+        "name": "Iron Signal 2",
+        "band_name": "Cass Okonkwo",
+        "album_name": "Salt Signal 2",
+        "item_url_root": "https://mira-okonkwo.bandcamp.com",
+        "item_url_path": "https://mira-okonkwo.bandcamp.com/track/tidal-signal-2"
+      },
+      {
+        "type": "t",
+        "name": "Cedar Signal 2",
+        "band_name": "Aster Alvarez",
+        "album_name": "Neon Signal 2",
+        "item_url_root": "https://juno-alvarez.bandcamp.com",
+        "item_url_path": "https://juno-alvarez.bandcamp.com/track/ember-signal-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Wren Alvarez",
+        "album_name": null,
+        "item_url_root": "https://indigo-alvarez.bandcamp.com",
+        "item_url_path": "https://indigo-alvarez.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Grey Signal 2",
+        "band_name": "Kiro Okonkwo",
+        "album_name": "Neon Harbour 2",
+        "item_url_root": "https://sable-okonkwo.bandcamp.com",
+        "item_url_path": "https://sable-okonkwo.bandcamp.com/track/sodium-tape-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Selah Alvarez",
+        "album_name": "Paper Tape 2",
+        "item_url_root": "https://orin-alvarez.bandcamp.com",
+        "item_url_path": "https://orin-alvarez.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Glass Tape 2",
+        "band_name": "Kiro Okonkwo",
+        "album_name": "Neon Harbour 2",
+        "item_url_root": "https://sable-okonkwo.bandcamp.com",
+        "item_url_path": "https://sable-okonkwo.bandcamp.com/track/night-tape-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Nova Alvarez",
+        "album_name": "Glass Meridian",
+        "item_url_root": "https://tamsin-alvarez.bandcamp.com",
+        "item_url_path": "https://tamsin-alvarez.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Rook Alvarez",
+        "album_name": "Slow Tape 2",
+        "item_url_root": "https://vale-alvarez.bandcamp.com",
+        "item_url_path": "https://vale-alvarez.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Quiet Tape 2",
+        "band_name": "Aster Alvarez",
+        "album_name": "Neon Signal 2",
+        "item_url_root": "https://juno-alvarez.bandcamp.com",
+        "item_url_path": "https://juno-alvarez.bandcamp.com/track/copper-tape-2"
+      },
+      {
+        "type": "t",
+        "name": "Velvet Tape 2",
+        "band_name": "Ilya Alvarez",
+        "album_name": "Velvet Tape 2",
+        "item_url_root": "https://noor-alvarez.bandcamp.com",
+        "item_url_path": "https://noor-alvarez.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Kiro Alvarez",
+        "album_name": "Glass Meridian",
+        "item_url_root": "https://sable-alvarez.bandcamp.com",
+        "item_url_path": "https://sable-alvarez.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Hollow Tape 2",
+        "band_name": "Fen Alvarez",
+        "album_name": "Hollow Tape 2",
+        "item_url_root": "https://odile-alvarez.bandcamp.com",
+        "item_url_path": "https://odile-alvarez.bandcamp.com/track/amber-tape-2"
+      },
+      {
+        "type": "t",
+        "name": "Winter Tape 2",
+        "band_name": "Bram Alvarez",
+        "album_name": null,
+        "item_url_root": "https://lera-alvarez.bandcamp.com",
+        "item_url_path": "https://lera-alvarez.bandcamp.com/track/static-tape-2"
+      },
+      {
+        "type": "t",
+        "name": "Marble Tape 2",
+        "band_name": "Aster Alvarez",
+        "album_name": "Neon Signal 2",
+        "item_url_root": "https://juno-alvarez.bandcamp.com",
+        "item_url_path": "https://juno-alvarez.bandcamp.com/track/iron-tape-2"
+      },
+      {
+        "type": "t",
+        "name": "Salt Tape 2",
+        "band_name": "Cass Alvarez",
+        "album_name": "Glass Meridian",
+        "item_url_root": "https://mira-alvarez.bandcamp.com",
+        "item_url_path": "https://mira-alvarez.bandcamp.com/track/tidal-tape-2"
+      },
+      {
+        "type": "t",
+        "name": "Cedar Tape 2",
+        "band_name": "Aster Sternberg",
+        "album_name": "Neon Tape 2",
+        "item_url_root": "https://juno-sternberg.bandcamp.com",
+        "item_url_path": "https://juno-sternberg.bandcamp.com/track/ember-tape-2"
+      },
+      {
+        "type": "t",
+        "name": "Grey Tape 2",
+        "band_name": "Wren Sternberg",
+        "album_name": "Grey Tape 2",
+        "item_url_root": "https://indigo-sternberg.bandcamp.com",
+        "item_url_path": "https://indigo-sternberg.bandcamp.com/track/sodium-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Paper Mirror 2",
+        "band_name": "Selah Sternberg",
+        "album_name": "Glass Mirror 2",
+        "item_url_root": "https://orin-sternberg.bandcamp.com",
+        "item_url_path": "https://orin-sternberg.bandcamp.com/track/night-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Mirror 2",
+        "band_name": "Selah Sternberg",
+        "album_name": "Glass Mirror 2",
+        "item_url_root": "https://orin-sternberg.bandcamp.com",
+        "item_url_path": "https://orin-sternberg.bandcamp.com/track/slow-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Quiet Mirror 2",
+        "band_name": "Ilya Okonkwo",
+        "album_name": "Glass Meridian",
+        "item_url_root": "https://noor-okonkwo.bandcamp.com",
+        "item_url_path": "https://noor-okonkwo.bandcamp.com/track/copper-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Velvet Mirror 2",
+        "band_name": "Nova Sternberg",
+        "album_name": "Hollow Mirror 2",
+        "item_url_root": "https://tamsin-sternberg.bandcamp.com",
+        "item_url_path": "https://tamsin-sternberg.bandcamp.com/track/amber-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Winter Mirror 2",
+        "band_name": "Rook Sternberg",
+        "album_name": "Salt Signal 2",
+        "item_url_root": "https://mira-okonkwo.bandcamp.com",
+        "item_url_path": "https://mira-okonkwo.bandcamp.com/track/static-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Marble Mirror 2",
+        "band_name": "Aster Alvarez",
+        "album_name": "Neon Signal 2",
+        "item_url_root": "https://juno-alvarez.bandcamp.com",
+        "item_url_path": "https://juno-alvarez.bandcamp.com/track/iron-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Salt Mirror 2",
+        "band_name": "Vale Sternberg",
+        "album_name": null,
+        "item_url_root": "https://ilya-sternberg.bandcamp.com",
+        "item_url_path": "https://ilya-sternberg.bandcamp.com/track/tidal-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Cedar Mirror 2",
+        "band_name": "Bram Alvarez",
+        "album_name": null,
+        "item_url_root": "https://lera-alvarez.bandcamp.com",
+        "item_url_path": "https://lera-alvarez.bandcamp.com/track/neon-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Ember Mirror 2",
+        "band_name": "Fen Alvarez",
+        "album_name": "Hollow Tape 2",
+        "item_url_root": "https://noor-sternberg.bandcamp.com",
+        "item_url_path": "https://noor-sternberg.bandcamp.com/track/grey-mirror-2"
+      },
+      {
+        "type": "t",
+        "name": "Sodium Field 2",
+        "band_name": "Aster Sternberg",
+        "album_name": "Neon Tape 2",
+        "item_url_root": "https://juno-sternberg.bandcamp.com",
+        "item_url_path": "https://juno-sternberg.bandcamp.com/track/paper-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Field 2",
+        "band_name": "Aster Sternberg",
+        "album_name": "Neon Tape 2",
+        "item_url_root": "https://juno-sternberg.bandcamp.com",
+        "item_url_path": "https://juno-sternberg.bandcamp.com/track/night-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Slow Field 2",
+        "band_name": "Aster Sternberg",
+        "album_name": "Neon Tape 2",
+        "item_url_root": "https://juno-sternberg.bandcamp.com",
+        "item_url_path": "https://juno-sternberg.bandcamp.com/track/quiet-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Copper Field 2",
+        "band_name": "Bram Okonkwo",
+        "album_name": "Quiet Signal 2",
+        "item_url_root": "https://lera-okonkwo.bandcamp.com",
+        "item_url_path": "https://lera-okonkwo.bandcamp.com/track/velvet-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Hollow Field 2",
+        "band_name": "Kiro Sternberg",
+        "album_name": "Hollow Field 2",
+        "item_url_root": "https://sable-sternberg.bandcamp.com",
+        "item_url_path": "https://sable-sternberg.bandcamp.com/track/amber-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Fen Sternberg",
+        "album_name": "Winter Field 2",
+        "item_url_root": "https://odile-sternberg.bandcamp.com",
+        "item_url_path": "https://odile-sternberg.bandcamp.com/track/glass-meridian"
+      },
+      {
+        "type": "t",
+        "name": "Static Field 2",
+        "band_name": "Bram Sternberg",
+        "album_name": "Static Field 2",
+        "item_url_root": "https://lera-sternberg.bandcamp.com",
+        "item_url_path": "https://lera-sternberg.bandcamp.com/track/marble-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Iron Field 2",
+        "band_name": "Cass Sternberg",
+        "album_name": "Iron Field 2",
+        "item_url_root": "https://mira-sternberg.bandcamp.com",
+        "item_url_path": "https://mira-sternberg.bandcamp.com/track/salt-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Tidal Field 2",
+        "band_name": "Aster Alvarez",
+        "album_name": "Neon Signal 2",
+        "item_url_root": "https://juno-alvarez.bandcamp.com",
+        "item_url_path": "https://juno-alvarez.bandcamp.com/track/cedar-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Wren Alvarez",
+        "album_name": "Neon Field 2",
+        "item_url_root": "https://indigo-alvarez.bandcamp.com",
+        "item_url_path": "https://indigo-alvarez.bandcamp.com/track/ember-field-2"
+      },
+      {
+        "type": "t",
+        "name": "Grey Field 2",
+        "band_name": "Bram Okonkwo",
+        "album_name": "Quiet Signal 2",
+        "item_url_root": "https://lera-okonkwo.bandcamp.com",
+        "item_url_path": "https://lera-okonkwo.bandcamp.com/track/sodium-season-2"
+      },
+      {
+        "type": "t",
+        "name": "Paper Season 2",
+        "band_name": "Aster Dray",
+        "album_name": "Salt Signal 2",
+        "item_url_root": "https://mira-okonkwo.bandcamp.com",
+        "item_url_path": "https://mira-okonkwo.bandcamp.com/track/glass-season-2"
+      },
+      {
+        "type": "t",
+        "name": "Glass Meridian",
+        "band_name": "Cass Okonkwo",
+        "album_name": "Night Season 2",
+        "item_url_root": "https://mira-okonkwo.bandcamp.com",
+        "item_url_path": "https://mira-okonkwo.bandcamp.com/track/glass-meridian"
+      }
+    ]
+  }
+}

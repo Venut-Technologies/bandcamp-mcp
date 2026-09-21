@@ -1,0 +1,163 @@
+name: Release
+
+# Pushing a `vX.Y.Z` tag is what releases. The owner pushes the tag; everything
+# below happens here, never from a laptop. If this workflow is red on a tag,
+# the release has not happened: delete the tag rather than fixing it in place.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write # create the GitHub Release
+  id-token: write # OIDC for npm trusted publishing and provenance
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # The tag, not a branch: the artifact is built from exactly what was
+      # tagged, even if main has moved on since.
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24" # the newest line CI proves; npm 11 needs it for OIDC
+          # No package-manager cache in the publishing job: the OIDC token that
+          # publishes to npm lives in this same job, and a poisoned cache would
+          # be restored into it. setup-node's own trusted-publishing guide asks
+          # for this. The cost is one uncached `npm ci` per release.
+          package-manager-cache: false
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing (OIDC, no token) needs npm 11.5 or newer. Pinned to
+      # 11 rather than latest: an npm major can raise its own Node floor above
+      # the one this workflow runs on, and then `@latest` fails to install
+      # before any check has run.
+      - name: Use an npm that can publish with OIDC
+        run: |
+          npm install -g npm@11
+          have="$(npm --version)"
+          echo "npm $have"
+          # Fail here, with a sentence that says what is wrong, rather than at
+          # the publish step with an authentication error nobody can read.
+          # 11.5.1 is the floor setup-node's own trusted-publishing guide
+          # states; below it the publish fails even with OIDC set up correctly.
+          if [ "$(printf '%s\n%s\n' "11.5.1" "$have" | sort -V | head -1)" != "11.5.1" ]; then
+            echo "npm $have cannot publish with OIDC; 11.5.1 or newer is required"
+            exit 1
+          fi
+
+      - run: npm ci
+
+      # The tag says what this release is; package.json is what npm would
+      # publish, and the server reports it to every MCP client in its server
+      # info. A mismatch means the release commit was not the one tagged, so
+      # stop before anything is published or announced.
+      - name: The tag and package.json agree
+        id: version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p 'require("./package.json").version')"
+          if [ "$tag" != "$pkg" ]; then
+            echo "tag $GITHUB_REF_NAME says $tag, package.json says $pkg"
+            exit 1
+          fi
+          echo "version=$tag" >> "$GITHUB_OUTPUT"
+
+      # The same checks CI runs on every push, once more on the tagged commit.
+      # Offline, like CI: the tests never reach Bandcamp.
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm test
+
+      # What ships is dist/ and the three files npm always includes. An
+      # allowlist, not a denylist: anything a "files" change lets in — sources,
+      # fixtures, notes, a stray dotfile — fails here rather than on npm.
+      - name: The tarball carries dist/ and nothing else
+        run: >-
+          npm pack --dry-run --json | node -e 'let input = "";
+          process.stdin.on("data", (chunk) => (input += chunk)).on("end", () => {
+          const files = JSON.parse(input)[0].files.map((file) => file.path);
+          const missing = ["dist/index.js", "dist/server.js"].filter((path) => !files.includes(path));
+          const allowed = ["package.json", "README.md", "LICENSE"];
+          const stray = files.filter((path) => !path.startsWith("dist/") && !allowed.includes(path));
+          if (missing.length || stray.length) {
+          console.error("Missing: " + (missing.join(", ") || "none") + "; not for the tarball: " + (stray.join(", ") || "none"));
+          process.exit(1); }
+          console.log("Tarball files:\n  " + files.join("\n  ")); });'
+
+      # The package as a user gets it: packed, installed into an empty project,
+      # and started the way an MCP client starts it. This is the last point
+      # before publishing where a broken entry point can still be caught.
+      - name: MCP handshake through the packed and installed bin
+        run: |
+          npm pack --pack-destination "$RUNNER_TEMP"
+          mkdir -p "$RUNNER_TEMP/consumer"
+          cd "$RUNNER_TEMP/consumer"
+          npm init -y >/dev/null
+          npm install "$RUNNER_TEMP"/bandcamp-mcp-*.tgz
+          node "$GITHUB_WORKSPACE/scripts/handshake-check.mjs" node_modules/.bin/bandcamp-mcp
+
+      # Release notes are the changelog entry, copied verbatim — never
+      # generated from commit titles. A version with no entry is a release
+      # nobody wrote notes for, so fail instead of publishing a blank one.
+      - name: Take this version's entry out of the changelog
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          # Stop at the next version heading, or at the link definitions at the
+          # foot of the file: for the newest version those definitions would
+          # otherwise be swept into the notes and then appended again below.
+          awk -v v="$version" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && (/^## \[/ || /^\[[^]]+\]: /) { exit }
+            found { print }
+          ' CHANGELOG.md > /tmp/notes.md
+          if [ ! -s /tmp/notes.md ]; then
+            echo "CHANGELOG.md has no entry for $version"
+            exit 1
+          fi
+          # The entry may use reference-style links ([#14]); their definitions
+          # live at the foot of the changelog. Without them the notes would
+          # render "[#14]" as plain text. Unused definitions render as nothing.
+          grep -E '^\[[^]]+\]: ' CHANGELOG.md >> /tmp/notes.md
+          cat /tmp/notes.md
+
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file /tmp/notes.md \
+            --verify-tag
+
+      # A version can already be on the registry: re-running a tag's workflow
+      # is a normal thing to do, and a first publication may have been made by
+      # hand. npm refuses to publish over an existing version, which would fail
+      # the run after the GitHub Release was already created, so ask the
+      # registry first. Only an exact version match skips the publish; anything
+      # else — no such package, no such version, a registry error — leaves the
+      # answer empty and the publish goes ahead.
+      - name: Is this version already on npm?
+        id: published
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          found="$(npm view "bandcamp-mcp@$version" version 2>/dev/null || true)"
+          if [ "$found" = "$version" ]; then
+            echo "already published, skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "not on the registry yet, publishing"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Trusted publishing: npm verifies this repository and this workflow file
+      # through OIDC, so there is no token to store, rotate or leak. Provenance
+      # ties the published tarball to this run. Skipped when the step above
+      # found this exact version already on the registry.
+      - name: Publish to npm
+        if: steps.published.outputs.skip != 'true'
+        run: npm publish --provenance --access public

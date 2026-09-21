@@ -1,0 +1,189 @@
+name: Bandcamp smoke test
+
+# The only workflow that reaches the real Bandcamp. Results go to
+# one tracking issue (label `smoke-test`), which is found open or closed, so its
+# comments form one diffable history.
+on:
+  schedule:
+    # Daily at an odd minute, plus the random delay below, so the canary is
+    # not a perfectly predictable request pattern arriving on Bandcamp's
+    # doorstep at the same second every day.
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+# Two overlapping runs could each create a tracking issue.
+concurrency:
+  group: smoke-test
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    # Up to 15 min of jitter, then install and eight paced checks.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+
+      - name: Random start delay (scheduled runs only)
+        if: github.event_name != 'workflow_dispatch'
+        shell: bash
+        run: sleep $((RANDOM % 900))
+
+      # `shell: bash` runs with pipefail, so a failing smoke test still fails
+      # this step through `tee`.
+      - name: Run smoke test
+        id: smoke
+        shell: bash
+        continue-on-error: true
+        run: npm run smoke-test 2>&1 | tee smoke-output.txt
+
+      - name: Report to the tracking issue
+        if: steps.smoke.outcome == 'success' || steps.smoke.outcome == 'failure'
+        uses: actions/github-script@v9
+        env:
+          SMOKE_OUTCOME: ${{ steps.smoke.outcome }}
+          # Optional repository variable: the GitHub login to assign.
+          SMOKE_MAINTAINER: ${{ vars.SMOKE_MAINTAINER }}
+        with:
+          script: |
+            const fs = require("fs");
+            const { owner, repo } = context.repo;
+            const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            // Hidden markers tell this workflow's own reports apart from
+            // anyone else's comments.
+            const FAILURE_MARK = "<!-- smoke-test:failure -->";
+            const RECOVERED_MARK = "<!-- smoke-test:recovered -->";
+            const LABELS = {
+              "smoke-test": { color: "ededed", description: "Tracking issue for the daily Bandcamp smoke test" },
+              "smoke:challenge": { color: "fbca04", description: "Smoke test met a bot-challenge, block or rate limit" },
+              "smoke:shape-changed": { color: "d93f0b", description: "Smoke test found a Bandcamp response shape change" },
+            };
+
+            // Newest issue with the label, open or closed (pull requests excluded).
+            const { data: labelled } = await github.rest.issues.listForRepo({
+              owner, repo, labels: "smoke-test", state: "all", sort: "created", direction: "desc", per_page: 20,
+            });
+            let issue = labelled.find((i) => !i.pull_request);
+
+            if (process.env.SMOKE_OUTCOME === "success") {
+              if (!issue || issue.state !== "open") return;
+              // Comment "recovered" only when this workflow's latest report
+              // on the issue is a failure; the maintainer closes the issue.
+              const { repository } = await github.graphql(
+                `query($owner: String!, $repo: String!, $number: Int!) {
+                  repository(owner: $owner, name: $repo) {
+                    issue(number: $number) { comments(last: 50) { nodes { body } } }
+                  }
+                }`,
+                { owner, repo, number: issue.number },
+              );
+              const latest = repository.issue.comments.nodes
+                .map((c) => c.body)
+                .reverse()
+                .find((body) => body.includes(FAILURE_MARK) || body.includes(RECOVERED_MARK));
+              if (latest && latest.includes(FAILURE_MARK)) {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: issue.number,
+                  body: `${RECOVERED_MARK}\nRecovered: all checks passed at ${new Date().toISOString()} ([run](${runUrl})). ` +
+                    "Close this issue once the fix is confirmed.",
+                });
+              }
+              return;
+            }
+
+            let summary = null;
+            try {
+              summary = JSON.parse(fs.readFileSync("smoke-result.json", "utf8"));
+            } catch (err) {
+              core.warning(`No readable smoke-result.json: ${err.message}`);
+            }
+            // Bandcamp-supplied text goes into code spans: no markdown, no @mentions.
+            const code = (value) =>
+              value === undefined || value === null || value === ""
+                ? "—"
+                : "`" + String(value).replace(/\s+/g, " ").replace(/`/g, "'").replace(/\|/g, "\\|").slice(0, 300) + "`";
+            let body;
+            if (summary) {
+              body = [
+                FAILURE_MARK,
+                `**Smoke test failed** at ${summary.timestamp} ([run](${runUrl})).`,
+                "",
+                "| Result | Check | Target | Kind | Error | HTTP | Page title | Message |",
+                "|---|---|---|---|---|---|---|---|",
+                ...summary.results.map((r) =>
+                  `| ${r.ok ? "OK" : "**FAIL**"} | ${r.name} | ${code(r.target)} | ${r.kind ?? "—"} | ` +
+                  `${r.errorName ?? "—"} | ${r.httpStatus ?? "—"} | ${code(r.pageTitle)} | ${code(r.message)} |`),
+              ].join("\n");
+            } else {
+              let output = "";
+              try {
+                output = fs.readFileSync("smoke-output.txt", "utf8").slice(-3000);
+              } catch {}
+              body = [
+                FAILURE_MARK,
+                `**Smoke test failed** at ${new Date().toISOString()} without writing smoke-result.json ([run](${runUrl})).`,
+                "",
+                "~~~~",
+                output.replace(/~~~~/g, "~ ~ ~ ~"),
+                "~~~~",
+              ].join("\n");
+            }
+
+            async function ensureLabel(name) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name });
+              } catch (err) {
+                if (err.status !== 404) throw err;
+                await github.rest.issues.createLabel({ owner, repo, name, ...LABELS[name] });
+              }
+            }
+            const kinds = new Set((summary?.results ?? []).filter((r) => !r.ok).map((r) => r.kind));
+            const labels = ["smoke-test", ...["challenge", "shape-changed"].filter((k) => kinds.has(k)).map((k) => `smoke:${k}`)];
+            for (const name of labels) await ensureLabel(name);
+
+            // A new failure episode: create the issue, or reopen the closed one.
+            let newEpisode = false;
+            if (!issue) {
+              ({ data: issue } = await github.rest.issues.create({
+                owner, repo,
+                title: "Bandcamp smoke test failures",
+                body: "Tracking issue for the daily Bandcamp smoke test (.github/workflows/smoke-test.yml). " +
+                  "Each failing run comments here with its results; a passing run after a failure comments \"Recovered\". " +
+                  "Close this issue once a fix is confirmed; the next failure reopens it.",
+                labels: ["smoke-test"],
+              }));
+              newEpisode = true;
+            } else if (issue.state === "closed") {
+              await github.rest.issues.update({ owner, repo, issue_number: issue.number, state: "open" });
+              newEpisode = true;
+            }
+
+            await github.rest.issues.createComment({ owner, repo, issue_number: issue.number, body });
+            await github.rest.issues.addLabels({ owner, repo, issue_number: issue.number, labels });
+            const maintainer = (process.env.SMOKE_MAINTAINER || "").trim();
+            if (maintainer) {
+              await github.rest.issues.addAssignees({ owner, repo, issue_number: issue.number, assignees: [maintainer] });
+            }
+            if (newEpisode) {
+              // Pinning can be refused (permissions, pin limit); the report stands without it.
+              try {
+                await github.graphql(
+                  "mutation($id: ID!) { pinIssue(input: { issueId: $id }) { issue { number } } }",
+                  { id: issue.node_id },
+                );
+              } catch (err) {
+                core.warning(`Could not pin issue #${issue.number}: ${err.message}`);
+              }
+            }
+
+      - name: Fail the job if the smoke test failed
+        if: steps.smoke.outcome == 'failure'
+        run: exit 1

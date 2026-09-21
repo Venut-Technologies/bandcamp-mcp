@@ -1,0 +1,356 @@
+{
+  "auto": {
+    "results": [
+      {
+        "type": "a",
+        "name": "TRIPTYCH",
+        "band_name": "Vesper Brut",
+        "item_url_root": "https://vesperbrut.bandcamp.com",
+        "item_url_path": "https://vesperbrut.bandcamp.com/album/triptych"
+      },
+      {
+        "type": "a",
+        "name": "Slow Season 2",
+        "band_name": "Vesper Brut",
+        "item_url_root": "https://vesperbrut.bandcamp.com",
+        "item_url_path": "https://vesperbrut.bandcamp.com/album/quiet-season-2"
+      },
+      {
+        "type": "a",
+        "name": "Copper Season 2",
+        "band_name": "Juno Dray",
+        "item_url_root": "https://wren-dray.bandcamp.com",
+        "item_url_path": "https://wren-dray.bandcamp.com/album/velvet-season-2"
+      },
+      {
+        "type": "a",
+        "name": "Hollow Season 2",
+        "band_name": "Vesper Brut",
+        "item_url_root": "https://vesperbrut.bandcamp.com",
+        "item_url_path": "https://vesperbrut.bandcamp.com/album/amber-season-2"
+      },
+      {
+        "type": "a",
+        "name": "Winter Season 2",
+        "band_name": "Vesper Brut",
+        "item_url_root": "https://vesperbrut.bandcamp.com",
+        "item_url_path": "https://vesperbrut.bandcamp.com/album/static-season-2"
+      },
+      {
+        "type": "a",
+        "name": "Marble Season 2",
+        "band_name": "Vesper Brut",
+        "item_url_root": "https://vesperbrut.bandcamp.com",
+        "item_url_path": "https://vesperbrut.bandcamp.com/album/iron-season-2"
+      },
+      {
+        "type": "a",
+        "name": "Marlow Vesper",
+        "band_name": "Indigo Dray",
+        "item_url_root": "https://selah-dray.bandcamp.com",
+        "item_url_path": "https://selah-dray.bandcamp.com/album/salt-season-2"
+      },
+      {
+        "type": "a",
+        "name": "Static Signal",
+        "band_name": "Ilya Vane",
+        "item_url_root": "https://marlowvesper.bandcamp.com",
+        "item_url_path": "https://marlowvesper.bandcamp.com/album/marble-signal"
+      },
+      {
+        "type": "a",
+        "name": "Quiet Circuit",
+        "band_name": "Marlow Vesper",
+        "item_url_root": "https://marlowvesper.bandcamp.com",
+        "item_url_path": "https://marlowvesper.bandcamp.com/album/quiet-circuit"
+      },
+      {
+        "type": "a",
+        "name": "Marble Harbour",
+        "band_name": "Ilya Vane",
+        "item_url_root": "https://marlowvesper.bandcamp.com",
+        "item_url_path": "https://marlowvesper.bandcamp.com/album/neon-circuit"
+      },
+      {
+        "type": "a",
+        "name": "Neon Signal",
+        "band_name": "Marlow Vesper",
+        "item_url_root": "https://marlowvesper.bandcamp.com",
+        "item_url_path": "https://marlowvesper.bandcamp.com/album/ember-signal"
+      },
+      {
+        "type": "a",
+        "name": "Tidal Season 2",
+        "band_name": "Indigo Dray",
+        "item_url_root": "https://selah-dray.bandcamp.com",
+        "item_url_path": "https://selah-dray.bandcamp.com/album/cedar-season-2"
+      },
+      {
+        "type": "a",
+        "name": "Neon Season 2",
+        "band_name": "Orin Dray",
+        "item_url_root": "https://nova-dray.bandcamp.com",
+        "item_url_path": "https://nova-dray.bandcamp.com/album/ember-season-2"
+      },
+      {
+        "type": "a",
+        "name": "Amber Signal",
+        "band_name": "Noor Vane",
+        "item_url_root": "https://marlowvesper.bandcamp.com",
+        "item_url_path": "https://marlowvesper.bandcamp.com/album/winter-signal"
+      },
+      {
+        "type": "a",
+        "name": "Grey Season 2",
+        "band_name": "Tamsin Dray",
+        "item_url_root": "https://rook-dray.bandcamp.com",
+        "item_url_path": "https://rook-dray.bandcamp.com/album/sodium-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Paper Drift 2",
+        "band_name": "Vale Dray",
+        "item_url_root": "https://ilya-dray.bandcamp.com",
+        "item_url_path": "https://ilya-dray.bandcamp.com/album/glass-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Night Drift 2",
+        "band_name": "Noor Dray",
+        "item_url_root": "https://kiro-dray.bandcamp.com",
+        "item_url_path": "https://kiro-dray.bandcamp.com/album/slow-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Quiet Drift 2",
+        "band_name": "Tamsin Dray",
+        "item_url_root": "https://sable-dray.bandcamp.com",
+        "item_url_path": "https://sable-dray.bandcamp.com/album/copper-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Velvet Drift 2",
+        "band_name": "Fen Dray",
+        "item_url_root": "https://odile-dray.bandcamp.com",
+        "item_url_path": "https://odile-dray.bandcamp.com/album/hollow-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Amber Drift 2",
+        "band_name": "Fen Dray",
+        "item_url_root": "https://odile-dray.bandcamp.com",
+        "item_url_path": "https://odile-dray.bandcamp.com/album/winter-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Static Drift 2",
+        "band_name": "Bram Dray",
+        "item_url_root": "https://lera-dray.bandcamp.com",
+        "item_url_path": "https://lera-dray.bandcamp.com/album/marble-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Iron Drift 2",
+        "band_name": "Cass Dray",
+        "item_url_root": "https://mira-dray.bandcamp.com",
+        "item_url_path": "https://mira-dray.bandcamp.com/album/salt-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Tidal Drift 2",
+        "band_name": "Aster Fontaine",
+        "item_url_root": "https://juno-fontaine.bandcamp.com",
+        "item_url_path": "https://juno-fontaine.bandcamp.com/album/cedar-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Neon Drift 2",
+        "band_name": "Fen Dray",
+        "item_url_root": "https://odile-dray.bandcamp.com",
+        "item_url_path": "https://odile-dray.bandcamp.com/album/ember-drift-2"
+      },
+      {
+        "type": "a",
+        "name": "Grey Drift 2",
+        "band_name": "Wren Fontaine",
+        "item_url_root": "https://indigo-fontaine.bandcamp.com",
+        "item_url_path": "https://indigo-fontaine.bandcamp.com/album/sodium-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Paper Atlas 2",
+        "band_name": "Selah Fontaine",
+        "item_url_root": "https://orin-fontaine.bandcamp.com",
+        "item_url_path": "https://orin-fontaine.bandcamp.com/album/glass-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Night Atlas 2",
+        "band_name": "Nova Fontaine",
+        "item_url_root": "https://tamsin-fontaine.bandcamp.com",
+        "item_url_path": "https://tamsin-fontaine.bandcamp.com/album/slow-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Quiet Atlas 2",
+        "band_name": "Rook Fontaine",
+        "item_url_root": "https://vale-fontaine.bandcamp.com",
+        "item_url_path": "https://vale-fontaine.bandcamp.com/album/copper-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Velvet Atlas 2",
+        "band_name": "Vesper Brut",
+        "item_url_root": "https://ilya-fontaine.bandcamp.com",
+        "item_url_path": "https://ilya-fontaine.bandcamp.com/album/hollow-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Amber Atlas 2",
+        "band_name": "Noor Fontaine",
+        "item_url_root": "https://indigo-fontaine.bandcamp.com",
+        "item_url_path": "https://indigo-fontaine.bandcamp.com/album/winter-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Static Atlas 2",
+        "band_name": "Cass Dray",
+        "item_url_root": "https://mira-dray.bandcamp.com",
+        "item_url_path": "https://mira-dray.bandcamp.com/album/marble-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Iron Atlas 2",
+        "band_name": "Fen Dray",
+        "item_url_root": "https://odile-dray.bandcamp.com",
+        "item_url_path": "https://odile-dray.bandcamp.com/album/salt-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Tidal Atlas 2",
+        "band_name": "Kiro Fontaine",
+        "item_url_root": "https://mira-dray.bandcamp.com",
+        "item_url_path": "https://mira-dray.bandcamp.com/album/cedar-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Neon Atlas 2",
+        "band_name": "Sable Fontaine",
+        "item_url_root": "https://fen-fontaine.bandcamp.com",
+        "item_url_path": "https://fen-fontaine.bandcamp.com/album/ember-atlas-2"
+      },
+      {
+        "type": "a",
+        "name": "Grey Atlas 2",
+        "band_name": "Cass Dray",
+        "item_url_root": "https://mira-dray.bandcamp.com",
+        "item_url_path": "https://mira-dray.bandcamp.com/album/sodium-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Paper Chapel 2",
+        "band_name": "Odile Fontaine",
+        "item_url_root": "https://bram-fontaine.bandcamp.com",
+        "item_url_path": "https://bram-fontaine.bandcamp.com/album/glass-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Night Chapel 2",
+        "band_name": "Lera Fontaine",
+        "item_url_root": "https://indigo-fontaine.bandcamp.com",
+        "item_url_path": "https://indigo-fontaine.bandcamp.com/album/slow-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Quiet Chapel 2",
+        "band_name": "Nova Fontaine",
+        "item_url_root": "https://tamsin-fontaine.bandcamp.com",
+        "item_url_path": "https://tamsin-fontaine.bandcamp.com/album/copper-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Velvet Chapel 2",
+        "band_name": "Cass Fontaine",
+        "item_url_root": "https://mira-fontaine.bandcamp.com",
+        "item_url_path": "https://mira-fontaine.bandcamp.com/album/hollow-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Amber Chapel 2",
+        "band_name": "Cass Dray",
+        "item_url_root": "https://mira-dray.bandcamp.com",
+        "item_url_path": "https://mira-dray.bandcamp.com/album/winter-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Static Chapel 2",
+        "band_name": "Aster Vero",
+        "item_url_root": "https://juno-vero.bandcamp.com",
+        "item_url_path": "https://juno-vero.bandcamp.com/album/marble-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Iron Chapel 2",
+        "band_name": "Wren Vero",
+        "item_url_root": "https://indigo-vero.bandcamp.com",
+        "item_url_path": "https://indigo-vero.bandcamp.com/album/salt-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Tidal Chapel 2",
+        "band_name": "Selah Vero",
+        "item_url_root": "https://thelanternhouse.net",
+        "item_url_path": "https://thelanternhouse.net/album/fairy-tales-forgotten"
+      },
+      {
+        "type": "a",
+        "name": "Cedar Chapel 2",
+        "band_name": "Orin Vero",
+        "item_url_root": "https://nova-vero.bandcamp.com",
+        "item_url_path": "https://nova-vero.bandcamp.com/album/neon-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Ember Chapel 2",
+        "band_name": "Lera Fontaine",
+        "item_url_root": "https://indigo-fontaine.bandcamp.com",
+        "item_url_path": "https://indigo-fontaine.bandcamp.com/album/grey-chapel-2"
+      },
+      {
+        "type": "a",
+        "name": "Sodium Current 2",
+        "band_name": "Wren Fontaine",
+        "item_url_root": "https://indigo-fontaine.bandcamp.com",
+        "item_url_path": "https://indigo-fontaine.bandcamp.com/album/paper-current-2"
+      },
+      {
+        "type": "a",
+        "name": "Glass Current 2",
+        "band_name": "Tamsin Vero",
+        "item_url_root": "https://rook-vero.bandcamp.com",
+        "item_url_path": "https://rook-vero.bandcamp.com/album/night-current-2"
+      },
+      {
+        "type": "a",
+        "name": "Slow Current 2",
+        "band_name": "Vale Vero",
+        "item_url_root": "https://ilya-vero.bandcamp.com",
+        "item_url_path": "https://ilya-vero.bandcamp.com/album/quiet-current-2"
+      },
+      {
+        "type": "a",
+        "name": "Copper Current 2",
+        "band_name": "Noor Vero",
+        "item_url_root": "https://kiro-vero.bandcamp.com",
+        "item_url_path": "https://kiro-vero.bandcamp.com/album/velvet-current-2"
+      },
+      {
+        "type": "a",
+        "name": "Hollow Current 2",
+        "band_name": "Sable Vero",
+        "item_url_root": "https://ilya-dray.bandcamp.com",
+        "item_url_path": "https://ilya-dray.bandcamp.com/album/amber-current-2"
+      }
+    ]
+  }
+}

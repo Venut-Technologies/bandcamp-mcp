@@ -1,0 +1,43 @@
+{
+  "name": "bandcamp-mcp",
+  "version": "0.1.0",
+  "mcpName": "io.github.Venut-Technologies/bandcamp-mcp",
+  "description": "Unofficial MCP server for Bandcamp music discovery — search, browse, and inspect albums, artists, and tracks from Claude and other MCP clients.",
+  "type": "module",
+  "bin": { "bandcamp-mcp": "./dist/index.js" },
+  "main": "./dist/server.js",
+  "files": ["dist"],
+  "engines": { "node": ">=20" },
+  "license": "MIT",
+  "author": "Mikhail Chereshnev",
+  "homepage": "https://github.com/Venut-Technologies/bandcamp-mcp#readme",
+  "bugs": { "url": "https://github.com/Venut-Technologies/bandcamp-mcp/issues" },
+  "repository": { "type": "git", "url": "git+https://github.com/Venut-Technologies/bandcamp-mcp.git" },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "bandcamp",
+    "claude",
+    "music",
+    "music-discovery"
+  ],
+  "scripts": {
+    "build": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke-test": "tsx scripts/smoke-test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vitest": "4.1.11",
+    "tsx": "4.23.12",
+    "@types/node": "26.2.0"
+  }
+}

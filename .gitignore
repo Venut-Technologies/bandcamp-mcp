@@ -1,0 +1,14 @@
+node_modules/
+dist/
+*.log
+smoke-output.txt
+smoke-result.json
+*.tgz
+
+# Agent instructions live in the private governance repository (symlinked, never committed)
+AGENTS.md
+CLAUDE.md
+CLAUDE.local.md
+
+# Agent scratch space and the private planning archive live outside the tree
+.claude/

@@ -1,0 +1,123 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # Offline by design: tests run against committed fixtures and never reach
+  # Bandcamp, so a CI failure means our code broke and never that Bandcamp was
+  # slow. Live-network checks belong to the smoke-test canary, never here.
+  test:
+    name: test (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["20", "22", "24"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm test
+
+  # The package as users get it: packed, installed into a fresh project, and
+  # started the way MCP clients start it, on Linux and on Windows (where npm's
+  # bin is a .cmd shim and the README's config wraps npx in `cmd /c`). Proves
+  # the published file list, the shebang/shim launch path and that the built
+  # dist loads on every supported Node. Needs the npm registry for the
+  # tarball's dependencies; never reaches Bandcamp.
+  package:
+    name: package (${{ matrix.os }}, Node ${{ matrix.node-version }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: ["20", "22", "24"]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # An allowlist, not a denylist: anything a future "files" change lets in
+      # — sources, fixtures, notes, a stray dotfile — fails this step.
+      - name: Tarball holds the entry points and nothing else
+        run: >-
+          npm pack --dry-run --json | node -e 'let input = "";
+          process.stdin.on("data", (chunk) => (input += chunk)).on("end", () => {
+          const files = JSON.parse(input)[0].files.map((file) => file.path);
+          const missing = ["dist/index.js", "dist/server.js"].filter((path) => !files.includes(path));
+          const allowed = ["package.json", "README.md", "LICENSE"];
+          const stray = files.filter((path) => !path.startsWith("dist/") && !allowed.includes(path));
+          if (missing.length || stray.length) {
+          console.error("Missing: " + (missing.join(", ") || "none") + "; not for the tarball: " + (stray.join(", ") || "none"));
+          process.exit(1); }
+          console.log("Tarball files:\n  " + files.join("\n  ")); });'
+      - run: npm pack --pack-destination "$RUNNER_TEMP"
+      - name: Install the tarball into a fresh project
+        working-directory: ${{ runner.temp }}
+        run: |
+          mkdir consumer
+          cd consumer
+          npm init -y
+          npm install ../bandcamp-mcp-*.tgz
+      - name: MCP handshake through the installed bin
+        working-directory: ${{ runner.temp }}/consumer
+        run: node "${{ github.workspace }}/scripts/handshake-check.mjs" "node_modules/.bin/bandcamp-mcp${{ runner.os == 'Windows' && '.cmd' || '' }}"
+      # The README's launch commands, verbatim. In a project that has the
+      # package installed, npx runs the local bin instead of the registry's.
+      - name: MCP handshake through the README's command (npx)
+        if: runner.os != 'Windows'
+        working-directory: ${{ runner.temp }}/consumer
+        run: node "${{ github.workspace }}/scripts/handshake-check.mjs" npx -y bandcamp-mcp
+      - name: MCP handshake through the README's Windows command (cmd /c npx)
+        if: runner.os == 'Windows'
+        working-directory: ${{ runner.temp }}/consumer
+        # Not bash: Git Bash rewrites an argument like "/c" into a Windows path.
+        shell: pwsh
+        run: node "${{ github.workspace }}/scripts/handshake-check.mjs" cmd /c npx -y bandcamp-mcp
+
+  # Supply chain: exact pins and advisories. A separate job, so a newly
+  # published advisory turns this check red without marking the code under
+  # test as broken.
+  supply-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      # `npm ci` accepts a range as long as the lockfile agrees with it, so pin
+      # drift (e.g. "^4.4.3" plus a regenerated lockfile) is caught here instead.
+      - name: Direct dependencies are exact versions
+        run: >-
+          node -e 'const p = require("./package.json");
+          const bad = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"].flatMap((f) =>
+          Object.entries(p[f] ?? {}).filter(([, v]) => !/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$/.test(v))
+          .map(([n, v]) => f + "." + n + ": " + JSON.stringify(v)));
+          if (bad.length) { console.error("Not an exact version:\n  " + bad.join("\n  ")); process.exit(1); }'
+      # Both read package-lock.json only, so no install is needed.
+      - name: No high/critical advisories in runtime dependencies
+        run: npm audit --omit=dev --audit-level=high
+      # Dev dependencies run in CI and on contributors' machines.
+      - name: No critical advisories in any dependency
+        run: npm audit --audit-level=critical
