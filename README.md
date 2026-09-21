@@ -58,10 +58,17 @@ issue. The endpoint notes are in
   and `*.bandcamp.com` hosts are ever fetched: redirects are followed by
   hand (at most 3) and each target is checked against that list.
 
+Bandcamp's `robots.txt` closes `/api/` to crawlers, which covers the search
+endpoint, and explicitly allows the browse one. This server is not a crawler:
+it fetches one page per tool call you make, follows no links and stores
+nothing. That reading, the argument against it, and the commitment to change
+or drop a tool if Bandcamp objects are all recorded in
+[CONTRIBUTING.md](./CONTRIBUTING.md#robotstxt).
+
 The repository (not the npm package) contains pages and API responses
 captured from Bandcamp as test fixtures, with the signed stream and download
-URLs redacted. How these endpoints relate to Bandcamp's `robots.txt` is recorded
-in [CONTRIBUTING.md](./CONTRIBUTING.md#robotstxt).
+URLs redacted, the identities and free text replaced by invented ones, and
+each page cut down to the markup the parsers read.
 
 Found a bug, or have an abuse concern? Please open an issue:
 https://github.com/Venut-Technologies/bandcamp-mcp/issues

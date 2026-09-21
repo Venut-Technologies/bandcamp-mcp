@@ -81,6 +81,7 @@ code that enforces it and the tests that would fail if it stopped being true.
 8. **Not affiliated with Bandcamp, and honest about what that means.** The README says so in the
    first screen, names the endpoints used and where they came from
    (`docs/bandcamp-endpoints.md`), and states that any of them can break without notice. How these
-   endpoints relate to Bandcamp's `robots.txt` is recorded in `CONTRIBUTING.md` rather than left
-   for a reader to wonder about. If Bandcamp objects to a part of this, the project changes or
-   drops that part.
+   endpoints relate to Bandcamp's `robots.txt` — including the decision to ship `bandcamp_search`
+   although `/api/` is closed to crawlers, and the argument against it — is recorded in
+   `CONTRIBUTING.md` rather than left for a reader to wonder about. If Bandcamp objects to a part
+   of this, the project changes or drops that part.
