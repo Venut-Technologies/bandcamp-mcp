@@ -1,93 +1,44 @@
 # bandcamp-mcp
 
+[![npm](https://img.shields.io/npm/v/bandcamp-mcp.svg)](https://www.npmjs.com/package/bandcamp-mcp)
 [![CI](https://github.com/Venut-Technologies/bandcamp-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/Venut-Technologies/bandcamp-mcp/actions/workflows/ci.yml)
 [![Bandcamp smoke test](https://github.com/Venut-Technologies/bandcamp-mcp/actions/workflows/smoke-test.yml/badge.svg)](https://github.com/Venut-Technologies/bandcamp-mcp/actions/workflows/smoke-test.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Dig through Bandcamp by talking to Claude: chase a label's roster, see what is
+new under a tag, pull up an album's tracklist and price, and find who actually
+made track 7 on that compilation. `bandcamp-mcp` is a local
+[MCP](https://modelcontextprotocol.io) server — the way an AI assistant reaches
+tools on your machine — so any MCP client can use it: Claude Desktop, Claude
+Code, Cursor, VS Code. No account, no API key, nothing to configure.
 
 **Status: experimental.** Pre-1.0 and actively developed: a minor version may
 change behaviour or break compatibility, a patch never does. Only the latest
 release is supported.
 
-An unofficial MCP (Model Context Protocol) server for Bandcamp music
-discovery: search, browse by genre tag, and look up albums, artists, labels
-and tracks from Claude or any other MCP client. Anonymous and read-only: no
-account, API key or configuration.
-
 **Not affiliated with, endorsed by, or sponsored by Bandcamp.**
 
-## How this works, and why it can break
+## What you can ask
 
-Bandcamp has no public catalog API, so every tool call makes live requests
-to the same endpoints Bandcamp's own website uses:
+- "What has Sacred Bones put out lately, and who's on it?"
+- "Find the album *Cathedral* by John Carpenter and read me the tracklist with
+  track lengths."
+- "What's new under the tag `drum-bass` this week? Give me ten, with the label
+  for each."
+- "Is that compilation various-artists? Tell me who made each track."
+- "How much is this album, and is it name-your-price?"
+- "Find that Bandcamp link a friend sent me and tell me what else the artist
+  has released."
 
-- `bandcamp_search`: the JSON endpoint behind Bandcamp's search box
-  (`/api/bcsearch_public_api/1/autocomplete_elastic`);
-- `bandcamp_browse_tag`: the JSON endpoint behind bandcamp.com/discover
-  (`/api/discover/1/discover_web`);
-- `bandcamp_get_album` and `bandcamp_get_track`: the public release or
-  track page, read mostly from its schema.org JSON-LD block, with tags from
-  the page markup;
-- `bandcamp_get_artist`: the artist's or label's `/music` page, read from
-  its markup.
-
-None of these is a published, versioned API. Bandcamp can change them at any
-time and without notice, and a tool then stops working until this project
-ships a fix. When that happens the tool says so ("Bandcamp's response format
-looks like it changed", or that it got a bot check instead of data) and
-links to the issues page. A daily smoke test (badge above) runs every tool's
-client code against live Bandcamp pages and reports failures to a tracking
-issue. The endpoint notes are in
-[docs/bandcamp-endpoints.md](./docs/bandcamp-endpoints.md).
-
-- **Metadata only.** Releases are identified by slug, and the result
-  schemas (`src/client/types.ts`) have no field for stream, download or
-  purchase links, so the signed audio links in Bandcamp's pages can't pass
-  through. (Free-text fields are the artists' own words, and may mention
-  links.)
-- **No caching or republishing.** Every tool call is fetched live. Nothing
-  is stored; results go to your MCP client and nowhere else.
-- **No telemetry.** Neither this package nor Venut-Technologies collects anything.
-  But every tool call is a request from your machine straight to Bandcamp,
-  which sees your IP address, what you asked for and when. The requests also
-  say where they come from, with the User-Agent
-  `Mozilla/5.0 (compatible; bandcamp-mcp/<version>; +https://github.com/Venut-Technologies/bandcamp-mcp)`,
-  so they don't look like a browser visit.
-- **Gentle by design.** At most 3 requests in flight, at least 150 ms
-  apart, a 7-second timeout, and one retry for a timeout, a transport-level
-  failure (a reset or closed socket, a DNS or TLS error), 5xx or 429
-  (honoring a `Retry-After` of up to 5 s). Only `bandcamp.com`
-  and `*.bandcamp.com` hosts are ever fetched: redirects are followed by
-  hand (at most 3) and each target is checked against that list.
-
-Bandcamp's `robots.txt` closes `/api/` to crawlers, which covers the search
-endpoint, and explicitly allows the browse one. This server is not a crawler:
-it fetches one page per tool call you make, follows no links and stores
-nothing. That reading, the argument against it, and the commitment to change
-or drop a tool if Bandcamp objects are all recorded in
-[CONTRIBUTING.md](./CONTRIBUTING.md#robotstxt).
-
-The repository (not the npm package) contains pages and API responses
-captured from Bandcamp as test fixtures, with the signed stream and download
-URLs redacted, the identities and free text replaced by invented ones, and
-each page cut down to the markup the parsers read.
-
-Found a bug, or have an abuse concern? Please open an issue:
-https://github.com/Venut-Technologies/bandcamp-mcp/issues
-
-Security problems go privately to security@venut.tech instead; see
-[SECURITY.md](./SECURITY.md).
+Answers come from Bandcamp's own public pages, fetched live — one request per
+tool call the assistant makes. The server reads; it never buys, downloads or
+touches an account, and it has no field in which a stream or download link
+could reach you.
 
 ## Install
 
-**Requires Node.js 20 or newer** (22 LTS recommended). That floor is measured,
-not assumed: every push runs the test suite on Node 20, 22 and 24, and packs
-the package, installs it into an empty project and starts it through an MCP
-handshake on each of those versions, on Linux and on Windows. Node 18 is not
-supported — it is end-of-life, and a dependency of the MCP SDK requires 20.
-
-Bandcamp itself has no versioned API; what the server reads is whatever
-bandcamp.com serves today, which is why the daily smoke test exists.
-
-No API keys, accounts or environment variables.
+`npx` is the whole install: your MCP client starts the server on demand and
+picks up fixes the next time it launches.
 
 **Claude Code:**
 
@@ -95,7 +46,7 @@ No API keys, accounts or environment variables.
 claude mcp add bandcamp -- npx -y bandcamp-mcp
 ```
 
-**Claude Desktop** (`claude_desktop_config.json`), or any MCP client that
+**Claude Desktop** (Settings → Developer → Edit Config), or any MCP client that
 starts a stdio server from a command:
 
 ```json
@@ -108,6 +59,29 @@ starts a stdio server from a command:
   }
 }
 ```
+
+**Cursor:** [install in Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=bandcamp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImJhbmRjYW1wLW1jcCJdfQ%3D%3D),
+or add the same JSON block to `~/.cursor/mcp.json`.
+
+**VS Code** (Copilot agent mode): [install in VS Code](https://insiders.vscode.dev/redirect/mcp/install?name=bandcamp&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22bandcamp-mcp%22%5D%7D),
+or run `code --add-mcp '{"name":"bandcamp","command":"npx","args":["-y","bandcamp-mcp"]}'`.
+
+**Claude Code plugin:** this repository is also a plugin
+(`.claude-plugin/plugin.json`), so `/plugin` can install it once it is listed.
+
+### Requirements, and what is actually tested
+
+**Node.js 20 or newer** (22 LTS recommended); Node 18 is end-of-life and a
+dependency of the MCP SDK requires 20. Every push runs the test suite on Node
+20, 22 and 24, then packs the package, installs it into an empty project and
+starts it through an MCP handshake on **Linux, macOS and Windows**, on each of
+those Node versions. Nothing else is claimed: other platforms may well work,
+but no one has measured them.
+
+Bandcamp itself has no versioned API. What the server reads is whatever
+bandcamp.com serves today, which is why a smoke test runs against the live site
+daily (badge above) and why a tool can start failing without warning — see
+[How this works](#how-this-works-and-why-it-can-break).
 
 To pin a version, use `bandcamp-mcp@<version>` (e.g. `npx -y bandcamp-mcp@0.1.0`).
 An unpinned `npx -y bandcamp-mcp` picks up fixes the next time your client
@@ -177,6 +151,70 @@ A global install doesn't update itself: run
 starts the server. If the registry is blocked, or only sometimes reachable,
 run `npm install -g bandcamp-mcp` once while you have access and use the
 absolute-path config above, which starts without the registry.
+
+## How this works, and why it can break
+
+Bandcamp has no public catalog API, so every tool call makes live requests
+to the same endpoints Bandcamp's own website uses:
+
+- `bandcamp_search`: the JSON endpoint behind Bandcamp's search box
+  (`/api/bcsearch_public_api/1/autocomplete_elastic`);
+- `bandcamp_browse_tag`: the JSON endpoint behind bandcamp.com/discover
+  (`/api/discover/1/discover_web`);
+- `bandcamp_get_album` and `bandcamp_get_track`: the public release or
+  track page, read mostly from its schema.org JSON-LD block, with tags from
+  the page markup;
+- `bandcamp_get_artist`: the artist's or label's `/music` page, read from
+  its markup.
+
+None of these is a published, versioned API. Bandcamp can change them at any
+time and without notice, and a tool then stops working until this project
+ships a fix. When that happens the tool says so ("Bandcamp's response format
+looks like it changed", or that it got a bot check instead of data) and
+links to the issues page. A daily smoke test (badge above) runs every tool's
+client code against live Bandcamp pages and reports failures to a tracking
+issue. The endpoint notes are in
+[docs/bandcamp-endpoints.md](./docs/bandcamp-endpoints.md).
+
+- **Metadata only.** Releases are identified by slug, and the result
+  schemas (`src/client/types.ts`) have no field for stream, download or
+  purchase links, so the signed audio links in Bandcamp's pages can't pass
+  through. (Free-text fields are the artists' own words, and may mention
+  links.)
+- **No caching or republishing.** Every tool call is fetched live. Nothing
+  is stored; results go to your MCP client and nowhere else.
+- **No telemetry.** Neither this package nor Venut Technologies collects
+  anything; what the server reads, sends and stores is listed in
+  [PRIVACY.md](./PRIVACY.md).
+  But every tool call is a request from your machine straight to Bandcamp,
+  which sees your IP address, what you asked for and when. The requests also
+  say where they come from, with the User-Agent
+  `Mozilla/5.0 (compatible; bandcamp-mcp/<version>; +https://github.com/Venut-Technologies/bandcamp-mcp)`,
+  so they don't look like a browser visit.
+- **Gentle by design.** At most 3 requests in flight, at least 150 ms
+  apart, a 7-second timeout, and one retry for a timeout, a transport-level
+  failure (a reset or closed socket, a DNS or TLS error), 5xx or 429
+  (honoring a `Retry-After` of up to 5 s). Only `bandcamp.com`
+  and `*.bandcamp.com` hosts are ever fetched: redirects are followed by
+  hand (at most 3) and each target is checked against that list.
+
+Bandcamp's `robots.txt` closes `/api/` to crawlers, which covers the search
+endpoint, and explicitly allows the browse one. This server is not a crawler:
+it fetches one page per tool call you make, follows no links and stores
+nothing. That reading, the argument against it, and the commitment to change
+or drop a tool if Bandcamp objects are all recorded in
+[CONTRIBUTING.md](./CONTRIBUTING.md#robotstxt).
+
+The repository (not the npm package) contains pages and API responses
+captured from Bandcamp as test fixtures, with the signed stream and download
+URLs redacted, the identities and free text replaced by invented ones, and
+each page cut down to the markup the parsers read.
+
+Found a bug, or have an abuse concern? Please open an issue:
+https://github.com/Venut-Technologies/bandcamp-mcp/issues
+
+Security problems go privately to security@venut.tech instead; see
+[SECURITY.md](./SECURITY.md).
 
 ## Tools
 
