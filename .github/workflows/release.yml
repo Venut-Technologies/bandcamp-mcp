@@ -133,10 +133,20 @@ jobs:
           grep -E '^\[[^]]+\]: ' CHANGELOG.md >> /tmp/notes.md
           cat /tmp/notes.md
 
+      # Idempotent, like the two publishing steps below it: re-running a tag is
+      # the normal way to finish a release that failed after this point, and
+      # `gh release create` answers an existing release with 422, which would
+      # stop the re-run before it reached the step it was started for. The
+      # existing release is left exactly as it is — its notes came from the same
+      # changelog entry, and rewriting them from a re-run would be a surprise.
       - name: Create the GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "GitHub Release $GITHUB_REF_NAME already exists, skipping"
+            exit 0
+          fi
           gh release create "$GITHUB_REF_NAME" \
             --title "$GITHUB_REF_NAME" \
             --notes-file /tmp/notes.md \

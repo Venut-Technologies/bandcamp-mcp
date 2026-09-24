@@ -16,6 +16,10 @@ contain breaking changes.
   registry asked npm about it two seconds later, before npm was serving it — so
   0.1.1 is on npm but never reached the registry, and 0.1.2 is the first version
   listed there.
+- A re-run of a release tag no longer stops at the GitHub Release step when
+  that release already exists. Re-running is how a release that failed after
+  publishing is finished, and the step now skips instead of failing, leaving
+  the existing release and its notes untouched.
 
 ## [0.1.1] - 2026-09-24
 
