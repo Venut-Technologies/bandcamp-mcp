@@ -1,6 +1,6 @@
 {
   "name": "bandcamp-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "mcpName": "io.github.Venut-Technologies/bandcamp-mcp",
   "description": "Dig Bandcamp from Claude and other AI assistants: search artists, albums, labels and tracks, browse genre tags for new and top releases, and read tracklists and prices. No account or API key. Unofficial, not affiliated with Bandcamp.",
   "type": "module",
