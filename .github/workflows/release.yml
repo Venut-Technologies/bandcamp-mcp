@@ -61,11 +61,19 @@ jobs:
         run: |
           tag="${GITHUB_REF_NAME#v}"
           pkg="$(node -p 'require("./package.json").version')"
+          srv="$(node -p 'require("./server.json").version')"
           if [ "$tag" != "$pkg" ]; then
             echo "tag $GITHUB_REF_NAME says $tag, package.json says $pkg"
             exit 1
           fi
+          # server.json is what the registry publishes; CI checks this on every
+          # push, and the release checks it again against the tag itself.
+          if [ "$tag" != "$srv" ]; then
+            echo "tag $GITHUB_REF_NAME says $tag, server.json says $srv"
+            exit 1
+          fi
           echo "version=$tag" >> "$GITHUB_OUTPUT"
+          echo "name=$(node -p 'require("./server.json").name')" >> "$GITHUB_OUTPUT"
 
       # The same checks CI runs on every push, once more on the tagged commit.
       # Offline, like CI: the tests never reach Bandcamp.
@@ -161,3 +169,61 @@ jobs:
       - name: Publish to npm
         if: steps.published.outputs.skip != 'true'
         run: npm publish --provenance --access public
+
+      # The MCP Registry entry is server.json, published from here. The registry
+      # trusts this repository through the job's OIDC token, so there is nothing
+      # to store: interactive login into an organization namespace currently
+      # returns 403 (registry issues #1649, #1537), and a token would be the
+      # wrong answer anyway.
+      #
+      # Same idea as the npm guard above: a re-run of a tag, or a version first
+      # published by hand, must not fail the release. `search` is a fuzzy match,
+      # so the name is compared exactly before the answer is believed.
+      - name: Is this version already in the MCP Registry?
+        id: registered
+        env:
+          MCP_NAME: ${{ steps.version.outputs.name }}
+          MCP_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          found="$(curl -sSfL --retry 3 --retry-all-errors --get \
+            --data-urlencode "search=$MCP_NAME" \
+            --data-urlencode "version=$MCP_VERSION" \
+            https://registry.modelcontextprotocol.io/v0/servers \
+            | node -e 'let input = "";
+              process.stdin.on("data", (chunk) => (input += chunk)).on("end", () => {
+                const servers = JSON.parse(input).servers ?? [];
+                const hit = servers.some((entry) =>
+                  entry.server?.name === process.env.MCP_NAME &&
+                  entry.server?.version === process.env.MCP_VERSION);
+                process.stdout.write(hit ? "yes" : "no");
+              });')"
+          if [ "$found" = "yes" ]; then
+            echo "$MCP_NAME $MCP_VERSION is already in the registry, skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "$MCP_NAME $MCP_VERSION is not in the registry yet, publishing"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Pinned to a release and verified by checksum: this job holds an OIDC
+      # token, so a moving "latest" download is not something to run in it.
+      - name: Install mcp-publisher
+        if: steps.registered.outputs.skip != 'true'
+        env:
+          PUBLISHER_VERSION: "1.8.1"
+          PUBLISHER_SHA256: "a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc"
+        run: |
+          curl -sSfL --retry 3 -o mcp-publisher.tar.gz \
+            "https://github.com/modelcontextprotocol/registry/releases/download/v${PUBLISHER_VERSION}/mcp-publisher_linux_amd64.tar.gz"
+          echo "${PUBLISHER_SHA256}  mcp-publisher.tar.gz" | sha256sum -c -
+          tar -xzf mcp-publisher.tar.gz mcp-publisher
+          ./mcp-publisher --version
+
+      # validate first: a schema problem should read as a schema problem, not as
+      # an authentication failure three steps later.
+      - name: Publish to the MCP Registry
+        if: steps.registered.outputs.skip != 'true'
+        run: |
+          ./mcp-publisher validate
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
