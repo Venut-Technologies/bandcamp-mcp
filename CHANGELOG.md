@@ -7,6 +7,11 @@ contain breaking changes.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-24
+
+Metadata and copy: the server now describes itself to clients and catalogs.
+No change to what any tool does or returns.
+
 ### Added
 
 - Every tool now reports a `title` and annotations (`readOnlyHint`,
@@ -94,5 +99,6 @@ straightforward Bandcamp reader:
 - **`priceCurrency`.** Added next to `priceText` (ISO 4217, from the same
   offer), since a price of "9" alone is ambiguous.
 
-[Unreleased]: https://github.com/Venut-Technologies/bandcamp-mcp/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Venut-Technologies/bandcamp-mcp/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Venut-Technologies/bandcamp-mcp/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Venut-Technologies/bandcamp-mcp/releases/tag/v0.1.0
