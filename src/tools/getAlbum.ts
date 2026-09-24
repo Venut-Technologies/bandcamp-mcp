@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { getAlbum } from "../client/bandcampClient.js";
 import { mapClientError } from "./errorMapping.js";
-import { detailSlugHelp, jsonResult, MAX_SLUG_LENGTH, UNTRUSTED_TEXT_NOTE, type ToolTextResult } from "./shared.js";
+import { MAX_SLUG_LENGTH, UNTRUSTED_TEXT_NOTE, detailSlugHelp, jsonResult, readOnlyBandcampTool, type ToolTextResult } from "./shared.js";
 
 const SLUG_HELP = detailSlugHelp(
   "album",
@@ -10,6 +10,7 @@ const SLUG_HELP = detailSlugHelp(
 );
 
 export const getAlbumToolConfig = {
+  ...readOnlyBandcampTool("Get Bandcamp album"),
   description:
     "Get full detail for one Bandcamp album as JSON: title, artist, releaseDate, label, tags, description, price and the full tracklist. " +
     "priceText is the digital album's price (the minimum; buyers may pay more) and priceCurrency its ISO 4217 currency code, both null when no price is listed; " +

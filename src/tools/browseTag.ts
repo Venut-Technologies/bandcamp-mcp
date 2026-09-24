@@ -4,11 +4,12 @@ import { BandcampUnavailableError } from "../client/errors.js";
 import { MAX_CURSOR_LENGTH } from "../client/normalize.js";
 import { sanitizeText } from "../client/sanitize.js";
 import { logDiagnostic, notFoundAsDrift } from "./errorMapping.js";
-import { errorResult, jsonResult, textResult, UNTRUSTED_TEXT_NOTE, type ToolTextResult } from "./shared.js";
+import { UNTRUSTED_TEXT_NOTE, errorResult, jsonResult, readOnlyBandcampTool, textResult, type ToolTextResult } from "./shared.js";
 
 const MAX_TAG_LENGTH = 100;
 
 export const browseTagToolConfig = {
+  ...readOnlyBandcampTool("Browse Bandcamp by tag"),
   description:
     "Browse Bandcamp releases by genre tag, sorted by top or new. Omit tag for an unfiltered top/new listing across all of Bandcamp. " +
     "Returns JSON {results, nextCursor}: up to 20 results per page, each {type, name, artist, slug}; pass a result's slug to bandcamp_get_album. " +

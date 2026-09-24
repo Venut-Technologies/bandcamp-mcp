@@ -40,3 +40,30 @@ export function detailSlugHelp(type: "album" | "track", example: string, sources
     `pass "<subdomain>/${type}/<item>".`
   );
 }
+
+// Every tool in this server reads Bandcamp and changes nothing there, so all
+// five carry the same hints: no writes, nothing to destroy, a repeated call
+// has no further effect, and the data comes from an open world — bandcamp.com,
+// which can answer differently tomorrow. `title` is what a client shows in a
+// tool picker; the name (bandcamp_get_album) is what the model calls.
+export function readOnlyBandcampTool(title: string): {
+  title: string;
+  annotations: {
+    title: string;
+    readOnlyHint: true;
+    destructiveHint: false;
+    idempotentHint: true;
+    openWorldHint: true;
+  };
+} {
+  return {
+    title,
+    annotations: {
+      title,
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: true,
+    },
+  };
+}

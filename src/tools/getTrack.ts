@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { getTrack } from "../client/bandcampClient.js";
 import { mapClientError } from "./errorMapping.js";
-import { detailSlugHelp, jsonResult, MAX_SLUG_LENGTH, UNTRUSTED_TEXT_NOTE, type ToolTextResult } from "./shared.js";
+import { MAX_SLUG_LENGTH, UNTRUSTED_TEXT_NOTE, detailSlugHelp, jsonResult, readOnlyBandcampTool, type ToolTextResult } from "./shared.js";
 
 // bandcamp_browse_tag lists albums only, so it is not a source of track slugs.
 const SLUG_HELP = detailSlugHelp(
@@ -14,6 +14,7 @@ const SLUG_HELP = detailSlugHelp(
 // answers at /track/<item> with its own JSON-LD), so this resolves any track
 // page, not only a standalone single.
 export const getTrackToolConfig = {
+  ...readOnlyBandcampTool("Get Bandcamp track"),
   description:
     "Get detail for one Bandcamp track page, either a standalone single or a track on an album. " +
     "Pass tracks[].slug from bandcamp_get_album or a track slug from bandcamp_search. " +

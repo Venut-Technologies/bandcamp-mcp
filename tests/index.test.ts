@@ -65,6 +65,32 @@ describe("bandcamp-mcp server", () => {
     ]);
   });
 
+  // Clients show `title` in a tool picker and use the hints to decide what to
+  // confirm with the user. All five tools read Bandcamp and change nothing, so
+  // the hints are identical; a write tool added later must not inherit them by
+  // copy-paste, which is why this asserts the exact object.
+  it("gives every tool a title and read-only, open-world annotations", async () => {
+    const { tools } = await server.client.listTools();
+    expect(tools).toHaveLength(5);
+    for (const tool of tools) {
+      expect(tool.title, tool.name).toBeTruthy();
+      expect(tool.annotations, tool.name).toEqual({
+        title: tool.title,
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      });
+    }
+    expect(tools.map((tool) => tool.title).sort()).toEqual([
+      "Browse Bandcamp by tag",
+      "Get Bandcamp album",
+      "Get Bandcamp artist or label",
+      "Get Bandcamp track",
+      "Search Bandcamp",
+    ]);
+  });
+
   it("gives every tool a description of its own plus the untrusted-text note", async () => {
     const { tools } = await server.client.listTools();
     for (const tool of tools) {

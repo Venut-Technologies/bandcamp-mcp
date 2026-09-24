@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { getArtist } from "../client/bandcampClient.js";
 import { mapClientError } from "./errorMapping.js";
-import { jsonResult, MAX_SLUG_LENGTH, UNTRUSTED_TEXT_NOTE, type ToolTextResult } from "./shared.js";
+import { MAX_SLUG_LENGTH, UNTRUSTED_TEXT_NOTE, jsonResult, readOnlyBandcampTool, type ToolTextResult } from "./shared.js";
 
 // Used in both the description and the slug's .describe().
 const SLUG_HELP =
@@ -10,6 +10,7 @@ const SLUG_HELP =
   "and so does the subdomain of a https://<subdomain>.bandcamp.com/ URL. It is never a display name.";
 
 export const getArtistToolConfig = {
+  ...readOnlyBandcampTool("Get Bandcamp artist or label"),
   description:
     "Get detail for one Bandcamp artist or label as JSON: name, location, bio and discography. " +
     "Each discography entry is {title, slug, type, artist}: pass an album's slug to bandcamp_get_album and a track's to bandcamp_get_track. " +
