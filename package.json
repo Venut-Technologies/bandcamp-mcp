@@ -2,7 +2,7 @@
   "name": "bandcamp-mcp",
   "version": "0.1.0",
   "mcpName": "io.github.Venut-Technologies/bandcamp-mcp",
-  "description": "Unofficial MCP server for Bandcamp music discovery — search, browse, and inspect albums, artists, and tracks from Claude and other MCP clients.",
+  "description": "Dig Bandcamp from Claude and other AI assistants: search artists, albums, labels and tracks, browse genre tags for new and top releases, and read tracklists and prices. No account or API key. Unofficial, not affiliated with Bandcamp.",
   "type": "module",
   "bin": { "bandcamp-mcp": "./dist/index.js" },
   "main": "./dist/server.js",
@@ -16,11 +16,16 @@
   "keywords": [
     "mcp",
     "mcp-server",
+    "modelcontextprotocol",
     "model-context-protocol",
     "bandcamp",
     "claude",
     "music",
-    "music-discovery"
+    "music-discovery",
+    "crate-digging",
+    "dj",
+    "new-releases",
+    "record-label"
   ],
   "scripts": {
     "build": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.json",
