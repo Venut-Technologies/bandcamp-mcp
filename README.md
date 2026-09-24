@@ -20,11 +20,11 @@ release is supported.
 
 ## What you can ask
 
-- "What has Sacred Bones put out lately, and who's on it?"
+- "What's in the Sacred Bones catalogue, and who is each release by?"
 - "Find the album *Cathedral* by John Carpenter and read me the tracklist with
   track lengths."
-- "What's new under the tag `drum-bass` this week? Give me ten, with the label
-  for each."
+- "Show me ten new releases under the tag `drum-bass`, then open each one and
+  tell me its label and release date."
 - "Is that compilation various-artists? Tell me who made each track."
 - "How much is this album, and is it name-your-price?"
 - "Find that Bandcamp link a friend sent me and tell me what else the artist
