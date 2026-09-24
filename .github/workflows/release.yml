@@ -219,6 +219,29 @@ jobs:
           tar -xzf mcp-publisher.tar.gz mcp-publisher
           ./mcp-publisher --version
 
+      # The registry does not take our word for the package: it asks npm whether
+      # this version exists, and answers 400 if it does not. npm says plainly
+      # that a publish "may take a few minutes to become available" — 0.1.1 was
+      # registered two seconds after publishing and lost that race, so the
+      # release went red with the package already on npm. Wait here instead.
+      - name: npm is serving this version
+        if: steps.registered.outputs.skip != 'true'
+        env:
+          MCP_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          deadline=$((SECONDS + 300))
+          until npm view "bandcamp-mcp@$MCP_VERSION" version >/dev/null 2>&1; do
+            if [ "$SECONDS" -ge "$deadline" ]; then
+              echo "npm has not served bandcamp-mcp@$MCP_VERSION for five minutes."
+              echo "The registry checks npm itself, so registering now would fail with 400."
+              echo "The package is published; re-run this workflow once npm serves it."
+              exit 1
+            fi
+            echo "npm does not serve $MCP_VERSION yet; waiting"
+            sleep 15
+          done
+          echo "npm serves bandcamp-mcp@$MCP_VERSION"
+
       # validate first: a schema problem should read as a schema problem, not as
       # an authentication failure three steps later.
       - name: Publish to the MCP Registry
@@ -226,4 +249,25 @@ jobs:
         run: |
           ./mcp-publisher validate
           ./mcp-publisher login github-oidc
-          ./mcp-publisher publish
+          # npm can still answer the registry with a stale 404 after it has
+          # answered us, so retry that one failure — a 400 naming this version
+          # as not found — and nothing else. A schema or auth error must fail
+          # on the first attempt, not three minutes later.
+          for attempt in 1 2 3; do
+            if output="$(./mcp-publisher publish 2>&1)"; then
+              echo "$output"
+              exit 0
+            fi
+            echo "$output"
+            case "$output" in
+              *"status 400"*"was not found"*) ;;
+              *)
+                echo "Not the npm-propagation failure; not retrying."
+                exit 1
+                ;;
+            esac
+            echo "Attempt $attempt: the registry cannot see this version on npm yet; waiting"
+            sleep 30
+          done
+          echo "The registry could not see bandcamp-mcp@${{ steps.version.outputs.version }} on npm after three attempts."
+          exit 1

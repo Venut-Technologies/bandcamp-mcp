@@ -7,6 +7,16 @@ contain breaking changes.
 
 ## [Unreleased]
 
+### Fixed
+
+- Nothing in the package itself changed. The release workflow now waits until
+  npm actually serves a new version before registering it with the MCP
+  Registry, and retries the one failure the registry's own npm check can
+  produce. Registering 0.1.1 lost that race — npm accepted the package and the
+  registry asked npm about it two seconds later, before npm was serving it — so
+  0.1.1 is on npm but never reached the registry, and 0.1.2 is the first version
+  listed there.
+
 ## [0.1.1] - 2026-09-24
 
 Metadata and copy: the server now describes itself to clients and catalogs.
