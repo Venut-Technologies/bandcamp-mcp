@@ -1,0 +1,14 @@
+{
+  "name": "bandcamp-mcp",
+  "description": "Dig Bandcamp from Claude Code: search artists, albums, labels and tracks, browse genre tags for new and top releases, and read tracklists and prices. No account or API key. Unofficial, not affiliated with Bandcamp.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Venut Technologies",
+    "url": "https://github.com/Venut-Technologies"
+  },
+  "homepage": "https://github.com/Venut-Technologies/bandcamp-mcp#readme",
+  "repository": "https://github.com/Venut-Technologies/bandcamp-mcp",
+  "license": "MIT",
+  "keywords": ["bandcamp", "music", "music-discovery", "crate-digging", "dj", "new-releases"],
+  "mcpServers": "./.mcp.json"
+}
