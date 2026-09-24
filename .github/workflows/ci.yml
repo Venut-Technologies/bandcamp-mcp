@@ -32,11 +32,12 @@ jobs:
       - run: npm test
 
   # The package as users get it: packed, installed into a fresh project, and
-  # started the way MCP clients start it, on Linux and on Windows (where npm's
-  # bin is a .cmd shim and the README's config wraps npx in `cmd /c`). Proves
-  # the published file list, the shebang/shim launch path and that the built
-  # dist loads on every supported Node. Needs the npm registry for the
-  # tarball's dependencies; never reaches Bandcamp.
+  # started the way MCP clients start it, on Linux, macOS and Windows (where
+  # npm's bin is a .cmd shim and the README's config wraps npx in `cmd /c`).
+  # Proves the published file list, the shebang/shim launch path and that the
+  # built dist loads on every supported Node. macOS is here because it is where
+  # most DJs run their clients, and the README says which platforms are proven.
+  # Needs the npm registry for the tarball's dependencies; never reaches Bandcamp.
   package:
     name: package (${{ matrix.os }}, Node ${{ matrix.node-version }})
     runs-on: ${{ matrix.os }}
@@ -44,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: ["20", "22", "24"]
     defaults:
       run:
