@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Venut-Technologies/bandcamp-mcp",
+  "title": "Bandcamp crate digging",
+  "description": "Dig Bandcamp from any AI assistant: search artists, albums, labels and tracks, browse genre tags.",
+  "version": "0.1.0",
+  "websiteUrl": "https://github.com/Venut-Technologies/bandcamp-mcp#readme",
+  "repository": {
+    "url": "https://github.com/Venut-Technologies/bandcamp-mcp",
+    "source": "github",
+    "id": "1342698536"
+  },
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/Venut-Technologies/bandcamp-mcp/main/assets/icon.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "bandcamp-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
