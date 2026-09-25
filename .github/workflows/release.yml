@@ -66,10 +66,16 @@ jobs:
             echo "tag $GITHUB_REF_NAME says $tag, package.json says $pkg"
             exit 1
           fi
-          # server.json is what the registry publishes; CI checks this on every
-          # push, and the release checks it again against the tag itself.
+          plugin="$(node -p 'require("./.claude-plugin/plugin.json").version')"
+          # server.json is what the registry publishes and plugin.json is what
+          # Claude Code shows; CI checks both on every push, and the release
+          # checks them again against the tag itself.
           if [ "$tag" != "$srv" ]; then
             echo "tag $GITHUB_REF_NAME says $tag, server.json says $srv"
+            exit 1
+          fi
+          if [ "$tag" != "$plugin" ]; then
+            echo "tag $GITHUB_REF_NAME says $tag, .claude-plugin/plugin.json says $plugin"
             exit 1
           fi
           echo "version=$tag" >> "$GITHUB_OUTPUT"

@@ -7,6 +7,15 @@ contain breaking changes.
 
 ## [Unreleased]
 
+### Changed
+
+- The Claude Code plugin declares its server inside
+  `.claude-plugin/plugin.json`, and the root `.mcp.json` is gone. That file is
+  also Claude Code's own project configuration, so anyone who opened this
+  repository was offered the server whether or not they wanted it.
+- The plugin manifest's version follows `package.json`; CI and the release
+  check that it does, alongside `server.json`.
+
 ## [0.1.2] - 2026-09-24
 
 ### Fixed

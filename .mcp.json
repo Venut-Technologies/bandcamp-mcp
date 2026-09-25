@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "bandcamp": {
-      "command": "npx",
-      "args": ["-y", "bandcamp-mcp"]
-    }
-  }
-}

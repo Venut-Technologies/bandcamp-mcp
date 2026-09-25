@@ -116,13 +116,16 @@ jobs:
           Object.entries(p[f] ?? {}).filter(([, v]) => !/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$/.test(v))
           .map(([n, v]) => f + "." + n + ": " + JSON.stringify(v)));
           if (bad.length) { console.error("Not an exact version:\n  " + bad.join("\n  ")); process.exit(1); }'
-      # The MCP Registry publishes what server.json says, and release.yml only
-      # checks the tag against package.json. Without this, a release could ship
-      # npm 0.1.1 and register 0.1.0.
-      - name: server.json and package.json agree on the version
+      # The MCP Registry publishes what server.json says, the plugin manifest is
+      # what Claude Code shows, and release.yml only checks the tag against
+      # package.json. Without this, a release could ship npm 0.1.1, register
+      # 0.1.0 and offer a plugin claiming a third version.
+      - name: server.json, the plugin and package.json agree on the version
         run: >-
-          node -e 'const pkg = require("./package.json"), srv = require("./server.json");
+          node -e 'const pkg = require("./package.json"), srv = require("./server.json"),
+          plugin = require("./.claude-plugin/plugin.json");
           const problems = [];
+          if (plugin.version !== pkg.version) problems.push(`plugin version: ${plugin.version}, package.json ${pkg.version}`);
           if (srv.version !== pkg.version) problems.push(`version: server.json ${srv.version}, package.json ${pkg.version}`);
           if (srv.name !== pkg.mcpName) problems.push(`name: server.json ${srv.name}, package.json mcpName ${pkg.mcpName}`);
           const npmPackage = (srv.packages ?? []).find((p) => p.registryType === "npm");
@@ -131,7 +134,7 @@ jobs:
           if (npmPackage.identifier !== pkg.name) problems.push(`package identifier: ${npmPackage.identifier}, package.json name ${pkg.name}`);
           if (npmPackage.version !== pkg.version) problems.push(`package version: ${npmPackage.version}, package.json ${pkg.version}`); }
           if (problems.length) { console.error(problems.join("\n")); process.exit(1); }
-          console.log(`server.json and package.json agree: ${srv.name} ${srv.version}`);'
+          console.log(`server.json, plugin.json and package.json agree: ${srv.name} ${srv.version}`);'
 
       # Both read package-lock.json only, so no install is needed.
       - name: No high/critical advisories in runtime dependencies
