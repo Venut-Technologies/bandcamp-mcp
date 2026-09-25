@@ -14,7 +14,11 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Build, tests, the npm publish, up to fifteen minutes of waiting for npm
+    # to serve the new version, and the registry publish with its retries. The
+    # old fifteen-minute limit would have cut the job off mid-wait, which is
+    # the one place where being cut off leaves a published package unlisted.
+    timeout-minutes: 40
     steps:
       # The tag, not a branch: the artifact is built from exactly what was
       # tagged, even if main has moved on since.
@@ -245,10 +249,10 @@ jobs:
         env:
           MCP_VERSION: ${{ steps.version.outputs.version }}
         run: |
-          deadline=$((SECONDS + 300))
+          deadline=$((SECONDS + 900))
           until npm view "bandcamp-mcp@$MCP_VERSION" version >/dev/null 2>&1; do
             if [ "$SECONDS" -ge "$deadline" ]; then
-              echo "npm has not served bandcamp-mcp@$MCP_VERSION for five minutes."
+              echo "npm has not served bandcamp-mcp@$MCP_VERSION for fifteen minutes."
               echo "The registry checks npm itself, so registering now would fail with 400."
               echo "The package is published; re-run this workflow once npm serves it."
               exit 1

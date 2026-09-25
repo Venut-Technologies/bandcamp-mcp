@@ -15,6 +15,9 @@ contain breaking changes.
   repository was offered the server whether or not they wanted it.
 - The plugin manifest's version follows `package.json`; CI and the release
   check that it does, alongside `server.json`.
+- The release workflow waits up to fifteen minutes for npm to serve a new
+  version, not five. Publishing 0.1.2 took five minutes and seven seconds and
+  cleared the old limit by a single poll.
 
 ## [0.1.2] - 2026-09-24
 
